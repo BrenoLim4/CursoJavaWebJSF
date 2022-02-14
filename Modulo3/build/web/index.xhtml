@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Modulo3</title>
+    </h:head>
+    <h:body style="background-color: bisque">
+        <h:form prependId="false">
+            <h:panelGrid columns="2">
+                
+                <h:outputLabel value="Nome:"/>
+                <h:inputText value="#{pessoaBean.pessoa.nome}"/>
+                <h:outputLabel value="sobrenome:"/>
+                <h:inputText value="#{pessoaBean.pessoa.sobrenome}"/>
+                <h:outputLabel value="data Nascimento:"/>
+                <h:inputText value="#{pessoaBean.pessoa.dataNascimento}">
+                    <f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="GMT-3"/>
+                </h:inputText>
+                
+                <h:commandButton id="butao" value="salvar" action="#{pessoaBean.salvar()}" 
+                                 style="margin-left: 30px; background-color: #00ccff"/>
+            </h:panelGrid>
+        </h:form>
+    </h:body>
+</html>
+
