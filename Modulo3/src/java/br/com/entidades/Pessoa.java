@@ -5,8 +5,10 @@
  */
 package br.com.entidades;
 
-import java.io.Serializable;
+import br.com.dao.Persistivel;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,13 +25,13 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="pessoa", schema = "modulo3_spring_mvc")
-public class Pessoa implements Serializable{
+public class Pessoa implements Persistivel{
     
     private static final long serialVersionUID = 1L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String nome;
     @Column(name = "sobre_nome",nullable = false)
     private String sobrenome;
@@ -39,9 +41,13 @@ public class Pessoa implements Serializable{
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
     @Transient
-    private Integer idade = 19;
+    private Long idade;
     
     public Pessoa() {
+    }
+    
+    public Pessoa(Long id) {
+        this.id = id;
     }
 
     public Pessoa(long id, String nome, String nomeCompleto, Date dataNascimento) {        
@@ -71,7 +77,7 @@ public class Pessoa implements Serializable{
             return false;
         }
         final Pessoa other = (Pessoa) obj;
-        return this.id == other.id;
+        return Objects.equals(this.id, other.id);
     }
     
     @Override
@@ -81,11 +87,11 @@ public class Pessoa implements Serializable{
 //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=">>>>Gets and Sets">
-    public long getId() {
+    public Long getId() {
         return id;
     }
     
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -109,7 +115,13 @@ public class Pessoa implements Serializable{
         this.dataNascimento = dataNascimento;
     }
     
-    public Integer getIdade() {
+    public Long getIdade() {
+        Calendar cal = Calendar.getInstance();
+        long diaMilissegundos = 86400000, agora = cal.getTimeInMillis();
+        cal.setTime(dataNascimento);
+        long dataNasc = cal.getTimeInMillis();
+        idade = ((agora - dataNasc) / diaMilissegundos) / 365;      
+        
         return idade;
     }
     
@@ -123,10 +135,6 @@ public class Pessoa implements Serializable{
     
     public void setNomeCompleto(String nomeCompleto) {
         this.nomeCompleto = nomeCompleto;
-    }
-
-    public void setIdade(Integer idade) {
-        this.idade = idade;
     }
     
 //</editor-fold>
