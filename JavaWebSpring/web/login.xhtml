@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Login</title>
+    </h:head>
+    <body style="background-color: darkslategray">
+        <!--<div style=" position: relative; transform: scaleX(1.5) scaley(1.3) translateY(30%) translateX(550px); width: 266px">-->
+        <div align="center" style="margin-top: 10%">
+            <h:form id="formLogin" prependId="false">
+                <h:panelGrid border="1" style="background-color: lightseagreen; transform: scaleX(1.5) scaley(1.3)">
+                    <h:panelGrid>
+                        <h:messages id="messaes" errorStyle="color: red; font-size: 12pt;"
+                                    infoStyle="color: blue; font-size: 12pt;"/>
+                        <h:graphicImage library="img" name="#{sessionBean.nameImageUserLogin}" />
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Login:"/>
+                        <h:inputText value="#{login.campoLogin}" required="true"
+                                     requiredMessage="Campo login é obrigatório"/>
+
+                        <h:outputLabel value="Senha:"/>
+                        <h:inputSecret value="#{login.campoSenha}" required="true"
+                                       requiredMessage="Campo senha é obrigatório"/>
+                    </h:panelGrid>
+
+                    <h:commandButton value="Entrar" 
+                                     action="#{login.logar()}"
+                                     style="margin-left: 40%; b"/>
+
+                </h:panelGrid>
+            </h:form>
+        </div>
+    </body>
+</html>
+
