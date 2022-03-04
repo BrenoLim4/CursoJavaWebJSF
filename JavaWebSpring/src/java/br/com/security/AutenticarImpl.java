@@ -17,7 +17,7 @@ import org.hibernate.HibernateException;
  */
 public class AutenticarImpl implements Autenticavel {
 
-    private static AutenticarImpl autenticacao = null;
+    private static AutenticarImpl autenticacao;
     private User usuario;
     
     private AutenticarImpl() {

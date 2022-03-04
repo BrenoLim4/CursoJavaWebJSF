@@ -6,20 +6,31 @@
 package br.com.bean;
 
 import br.com.dao.DAOGeneric;
+import br.com.entidades.Endereco;
 import br.com.entidades.Pessoa;
 import br.com.entidades.Sexo;
 import br.com.entidades.User;
 import br.com.security.AutenticarImpl;
+import com.google.gson.Gson;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.URL;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 import java.util.List;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
 
 /**
@@ -29,7 +40,6 @@ import javax.faces.model.SelectItem;
 @ViewScoped
 @ManagedBean(name = "pessoaBean")
 public class PessoaBean implements Serializable {
-
 
     private Pessoa pessoa = new Pessoa();
     private List<Pessoa> pessoas = new ArrayList();
@@ -41,7 +51,8 @@ public class PessoaBean implements Serializable {
     private String login;
     private String senha;
     private Long tipoUsuario;
-    private User users = new User();
+//    private User users = new User();
+    private Endereco endereco = new Endereco();
 
     public PessoaBean() {
     }
@@ -66,16 +77,25 @@ public class PessoaBean implements Serializable {
 
     public void limparCampos() {
         pessoa = new Pessoa();
+        endereco = new Endereco();
         tipoSexo = new Sexo();
         login = null;
         senha = null;
         tipoUsuario = null;
+        tituloPanel = "Incluir novo Usuário";
+        
     }
 
     public void salvar() {
         try {
             pessoa.setSexo(tipoSexo);
             pessoa = DAOGeneric.salvarOuAtualizar(pessoa);
+            
+            endereco.setIdPessoa(pessoa.getId());
+            endereco = DAOGeneric.salvarOuAtualizar(endereco);
+            
+//            pessoa.setEnderecoAtual(endereco);
+            
 
             if (!pessoas.contains(pessoa)) {
                 pessoas.add(pessoa);
@@ -86,10 +106,10 @@ public class PessoaBean implements Serializable {
                         .forEach(pes -> pes = pessoa);
             }
             pessoas.sort(comparing(Pessoa::getNome));
-            tituloPanel = "Incluir novo Usuário";
             limparCampos();
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Salvo com sucesso", ""));
         } catch (Exception ex) {
+            ex.printStackTrace();
             System.err.println("ERROR" + ex.toString());
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao Salvar", ""));
         }
@@ -126,6 +146,17 @@ public class PessoaBean implements Serializable {
         }
     }
 
+    public void pesquisaCep(AjaxBehaviorEvent event) {
+        try{
+            URL url = new URL("https://viacep.com.br/ws/"+endereco.getCep()+"/json/");
+            InputStream is = url.openConnection().getInputStream();            
+            endereco =  new Gson().fromJson(new InputStreamReader(is, "UTF-8"), Endereco.class);
+        } catch(JsonIOException | JsonSyntaxException | IOException ex){
+            FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "CEP inválido", ""));    
+            ex.printStackTrace();
+        }
+    }
+
     //<editor-fold defaultstate="collapsed" desc=">>>>Gets e Sets">
     public Pessoa getPessoa() {
         return pessoa;
@@ -135,8 +166,13 @@ public class PessoaBean implements Serializable {
         this.pessoa = pessoa;
     }
 
-    public User getUsers() {
-        return users;
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 
 //    public void setUsers(Users users) {
@@ -193,7 +229,7 @@ public class PessoaBean implements Serializable {
     public void setTipoSexo(Sexo tipoSexo) {
         this.tipoSexo = tipoSexo;
     }
-    
+
     public Long getTipoUsuario() {
         return tipoUsuario;
     }
@@ -201,8 +237,6 @@ public class PessoaBean implements Serializable {
     public void setTipoUsuario(Long tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
-    
 
 //</editor-fold>
-
 }

@@ -8,6 +8,7 @@ package br.com.util.jpaUtil;
 import br.com.dao.Persistivel;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+//import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 /**
@@ -30,5 +31,6 @@ public class JPAUtil {
     
     public static <E extends Persistivel> Object getIdEntidade(E entidade){
         return factory.getPersistenceUnitUtil().getIdentifier(entidade);
+        
     } 
 }

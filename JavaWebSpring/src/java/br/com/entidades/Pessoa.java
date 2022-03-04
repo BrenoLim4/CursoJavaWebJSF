@@ -6,10 +6,8 @@
 package br.com.entidades;
 
 import br.com.dao.Persistivel;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,11 +18,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 
 /**
  *
@@ -32,6 +33,11 @@ import javax.persistence.Transient;
  */
 @Entity
 @Table(name="pessoa", schema = "modulo3_spring_mvc")
+@NamedQueries({
+    @NamedQuery(name = "Pessoa.findAll", query = "select p from Pessoa p"),
+    @NamedQuery(name = "Pessoa.findById", query = "select p from Pessoa p where p.id = :id"),
+    @NamedQuery(name = "Pessoa.findByNome", query = "select p from Pessoa p where p.nome = :nome")
+})
 public class Pessoa implements Persistivel{
     
     private static final long serialVersionUID = 1L;
@@ -39,17 +45,24 @@ public class Pessoa implements Persistivel{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Required(message = "Campo [Nome] é obrigatório")
     private String nome;
     @Column(name = "sobre_nome",nullable = false)
+    @Required(message = "Campo [Sobrenome] é obrigatório")
     private String sobrenome;
     @Column(name = "nome_completo",nullable = false)
     private String nomeCompleto;
+    @Required(message = "Campo [Data de Nascimento] é obrigatório")
     @Column(name = "data_nascimento", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
+    @Required(message = "Campo [Sexo] é obrigatório")
     @JoinColumn(name = "id_sexo", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Sexo sexo;
+    @JoinColumn(name = "id_endereco_atual", referencedColumnName = "id")
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Endereco enderecoAtual;
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id_pessoa")    
 //    private List<User> usuarios = new ArrayList<>();
     @Transient
@@ -166,7 +179,16 @@ public class Pessoa implements Persistivel{
         return new Pessoa();
     }
     
+    public Endereco getEnderecoAtual() {
+        return enderecoAtual;
+    }
+
+    public void setEnderecoAtual(Endereco enderecoAtual) {
+        this.enderecoAtual = enderecoAtual;
+    }
+    
 //</editor-fold>
+
 
 
     

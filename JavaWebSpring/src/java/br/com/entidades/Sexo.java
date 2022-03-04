@@ -6,17 +6,13 @@
 package br.com.entidades;
 
 import br.com.dao.Persistivel;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  *
@@ -32,9 +28,9 @@ public class Sexo implements Persistivel {
     private Long id;
     @Column(name = "descricao", nullable = false)
     private String descricao;
-    @Transient
-    @OneToMany(mappedBy = "id_sexo", fetch = FetchType.LAZY)
-    private List<Pessoa> pessoas;
+//    @Transient
+//    @OneToMany(mappedBy = "id_sexo", fetch = FetchType.LAZY)
+//    private List<Pessoa> pessoas;
     
     @Override
     public Long getIdentifier() {
@@ -74,10 +70,10 @@ public class Sexo implements Persistivel {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    
-    public List<Pessoa> getPessoas() {
-        return pessoas;
-    }
+//    
+//    public List<Pessoa> getPessoas() {
+//        return pessoas;
+//    }
     
     
     

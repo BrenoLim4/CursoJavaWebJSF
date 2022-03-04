@@ -5,18 +5,15 @@
  */
 package br.com.bean;
 
-import br.com.dao.DAOGeneric;
 import br.com.entidades.User;
 import br.com.security.AutenticarImpl;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 import org.hibernate.HibernateException;
 
 /**
@@ -46,20 +43,30 @@ public class LoginBackBean implements Serializable {
                         .getExternalContext()
                         .getSessionMap()
                         .put("usuarioSessao", usuario);
-                url = "/faces/index.xhtml";
-            }else{
-                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou senha inválidos", ""));                
+                url = "/faces/index.xhtml?faces-rediretc=true";
+            } else {
+                FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login ou senha inválidos", ""));
             }
         } catch (HibernateException ex) {
             System.err.println(ex.toString());
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.err.println(ex.toString());
-        }
-        finally{
+        } finally {
             limparCampos();
             return url;
         }
+    }
 
+    public String logout() {
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        context.getExternalContext()
+                .getSessionMap()
+                .remove("usuarioSessao");
+        HttpServletRequest http = (HttpServletRequest) context.getExternalContext().getRequest();
+        http.getSession().invalidate();
+
+        return "/faces/login.xhtml?faces-rediretc=true";
     }
 
     private void limparCampos() {
