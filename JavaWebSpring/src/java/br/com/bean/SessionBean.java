@@ -5,9 +5,11 @@
  */
 package br.com.bean;
 
+import br.com.entidades.User;
 import java.io.Serializable;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 /**
  *
  * @author 99039833
@@ -23,12 +25,18 @@ public class SessionBean implements Serializable{
     private final String nameImageError = "iconError.png";
     private final String nameImageInfo = "iconInfo.png";
     private final String nameImageUserLogin = "iconUserLogin.png";
+    private final String nameImageLogin = "iconLogin.png";
+    private final String nameImageLogout = "iconLogout.png";
     private final String URL_PATH_IMG = "/resources/img/";
     
     
     public SessionBean() {
     }
-
+    
+    public static User getUser(){
+        return (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("usuarioSessao");
+    }
+    
     public String getImageUrl(String nameImg){
         return URL_PATH_IMG + nameImg;
     }
@@ -60,5 +68,15 @@ public class SessionBean implements Serializable{
     public String getNameImageUserLogin() {
         return nameImageUserLogin;
     }
+
+    public String getNameImageLogin() {
+        return nameImageLogin;
+    }
+
+    public String getNameImageLogout() {
+        return nameImageLogout;
+    }
+    
+    
     
 }

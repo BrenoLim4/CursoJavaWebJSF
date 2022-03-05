@@ -2,7 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>JavaWeb</title>
     </h:head>
@@ -14,6 +16,7 @@
         }
     </style>
     <h:body style="background-color: #ccffcc; font: bold 11pt italic">
+        <ui:include src="/menu.xhtml"/>
         <h:messages id="messaes" errorStyle="color: red; font-size: 12pt;"
                     infoStyle="color: blue; font-size: 12pt;">  
             <f:facet name="infoMarker"><h:graphicImage value="#{sessionBean.getImageUrl(sessionBean.nameImageInfo)}"/></f:facet>
@@ -29,38 +32,55 @@
                     <h:panelGrid columns="2">
 
                         <h:outputLabel value="Nome:"/>
-                        <h:inputText id="nome" value="#{pessoaBean.pessoa.nome}" 
-                                     onkeyup="
-                                             nomeComp.value = this.value + ' ' + sobreNome.value;
-                                     "/>
+                        <h:inputText id="nome" value="#{pessoaBean.pessoa.nome}"  required="true" 
+                                     pt:placeholder="Informe o Nome do usuário"                                     
+                                     onkeyup="nomeComp.value = this.value + ' ' + sobreNome.value" />
+                        
                         <h:outputLabel value="Sobrenome:"/>
                         <h:inputText id="sobreNome" value="#{pessoaBean.pessoa.sobrenome}" 
                                      onkeyup="
                                              nomeComp.value = nome.value + ' ' + this.value;
-                                     "/>
+                                     " required="true"/>
+                        
                         <h:outputLabel value="Nome comp:"/>
                         <h:inputText id="nomeComp" value="#{pessoaBean.pessoa.nomeCompleto}"
+                                     pt:placeholder="Inserido Automaticamente"
                                      onkeyup="this.value = nome.value + ' ' + sobreNome.value"/>
+                        
                         <h:outputLabel value="Data Nascimento:"/>
-                        <h:inputText value="#{pessoaBean.pessoa.dataNascimento}">
+                        <h:inputText id="DataNascimento" value="#{pessoaBean.pessoa.dataNascimento}" required="true"
+                                     pt:placeholder="dd/MM/aaaa">
                             <f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="GMT-3"/>
                         </h:inputText>
+                        
                         <h:outputLabel value="Sexo:"/>
-                        <h:selectOneMenu value="#{pessoaBean.tipoSexo}" converter="EntityConverter">
+                        <h:selectOneMenu id="sexo" required="true" value="#{pessoaBean.tipoSexo}" converter="EntityConverter">
                             <f:selectItem itemLabel="Selecione" noSelectionOption="true"/>
                             <f:selectItems value="#{pessoaBean.listSexo}" var="sexo" />                       
                         </h:selectOneMenu>
+                        
                         <h:outputLabel value="Tipo:"/>
-                        <h:selectOneMenu value="#{pessoaBean.tipoUsuario}" >
+                        <h:selectOneMenu id="tipoUsuario" required="true" value="#{pessoaBean.tipoUsuario}" >
                             <f:selectItem itemLabel="Selecione"/>
                             <f:selectItem itemLabel="Usuário Administrador" itemValue="1"/>
                             <f:selectItem itemLabel="Usuário Comum" itemValue="2"/>
                         </h:selectOneMenu>
                         
-                        <h:outputLabel value="Login:" rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}"/>
-                        <h:inputText value="#{pessoaBean.login}" rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}"/>
+                        <h:outputLabel value="CEP:"/>
+                        <h:inputText id="cep" value="#{pessoaBean.endereco.cep}" 
+                                     required="true" maxlength="8" pt:placeholder="00000000">
+                            <f:ajax event="blur" execute="@this" listener="#{pessoaBean.pesquisaCep}" render="logradouro"/>
+                        </h:inputText>
+                        
+                        <h:outputLabel value="Logradouro:"/>
+                        <h:inputText id="logradouro" value="#{pessoaBean.endereco.logradouro}" />
+                        
+                        <h:outputLabel value="Login:" rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}" />
+                        <h:inputText id="login" value="#{pessoaBean.login}" required="true" 
+                                     rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}"/>
+                        
                         <h:outputLabel value="Senha:" rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}"/>
-                        <h:inputSecret id="pass" value="#{pessoaBean.senha}" maxlength="30" 
+                        <h:inputSecret id="senha" required="true" value="#{pessoaBean.senha}" maxlength="30" 
                                        rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}"/>
                     </h:panelGrid>
 
@@ -68,12 +88,13 @@
                         <h:commandButton title="Salvar" image="#{sessionBean.getImageUrl(sessionBean.nameImageSave)}" 
                                          action="#{pessoaBean.salvar()}" 
                                          styleClass="butao"
-                                         onclick="return confirm('Deseja realmente salvar?');"/>
+                                         onclick="return confirm('Deseja realmente salvar?');">
+                            
+                        </h:commandButton>
                         <h:commandButton title="Cancelar" styleClass="butao" 
-                                         image="#{sessionBean.getImageUrl(sessionBean.nameImageCancel)}">
-                            <f:setPropertyActionListener value="#{pessoaBean.pessoa.instance}" target="#{pessoaBean.pessoa}"/>
-                            <f:setPropertyActionListener value="#{pessoaBean.pessoa.sexo}" target="#{pessoaBean.tipoSexo}"/>
-                            <f:setPropertyActionListener value="Incluir novo Usuário" target="#{pessoaBean.tituloPanel}"/>
+                                         image="#{sessionBean.getImageUrl(sessionBean.nameImageCancel)}"
+                                         action="#{pessoaBean.limparCampos()}">
+                            <f:ajax execute="@this" render="@form"/>
                         </h:commandButton>                    
                     </h:panelGrid>
 
@@ -82,7 +103,7 @@
             <div align="center" >
                 <h:outputText value="Nenhuma usuário cadastrado" styleClass="color: blue; font-size: 14pt" 
                               rendered="#{empty pessoaBean.pessoas}"/>
-                <h:dataTable value="#{pessoaBean.pessoas}" var="pessoa" 
+                <h:dataTable id="listaPessoas" value="#{pessoaBean.pessoas}" var="pessoa" 
                              border="1" cellpadding="6" bgcolor="white" style="margin-top: 30px; min-width: 1200px " 
                              rendered="#{not empty pessoaBean.pessoas}">
                     <f:facet name="header">
@@ -91,11 +112,13 @@
                                 <h:selectBooleanCheckbox value="#{pessoaBean.selecionarTodos}" 
                                                          title="Selecionar todos" 
                                                          style="margin-left: 15px" disabled="true"/>                            
-                                <h:commandButton title="Excluir selecionados" 
+                                <h:commandButton id="excluirSelecionados" title="Excluir selecionados" 
                                                  image="#{sessionBean.getImageUrl(sessionBean.nameImgDelete)}" 
                                                  action="#{pessoaBean.excluirSelecionados()}" 
                                                  styleClass="butao"
-                                                 onclick="return confirm('Confirma exclusão das pessoas selecionadas?')"/>
+                                                 onclick="return confirm('Confirma exclusão das pessoas selecionadas?')">
+                                    <f:ajax event="click" execute="@this" render="@form"/>
+                                </h:commandButton>
                             </h:panelGrid>
                             <h:outputLabel value="Usuarios Cadastrados" style="font-size: 18pt" />
                         </h:panelGrid>
@@ -135,13 +158,16 @@
                         <h:commandButton title="Editar" image="#{sessionBean.getImageUrl(sessionBean.nameImageEdit)}" styleClass="butao">
                             <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
                             <f:setPropertyActionListener value="#{pessoa.sexo}" target="#{pessoaBean.tipoSexo}"/>
+                            <f:setPropertyActionListener value="#{pessoa.enderecoAtual}" target="#{pessoaBean.endereco}"/>                            
                             <f:setPropertyActionListener value="Editar dados do Usuário" target="#{pessoaBean.tituloPanel}"/>
+                             <f:ajax execute="@this" render="@form"/>
                         </h:commandButton>
                         <h:commandButton action="#{pessoaBean.excluir()}" 
-                                         title="Deletar"
+                                         title="Excluir"
                                          onclick="return confirm('Confirma exclusão?')" styleClass="butao" 
                                          image="#{sessionBean.getImageUrl(sessionBean.nameImgDelete)}">
                             <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
+                             <f:ajax execute="@this" render="@form"/>
                         </h:commandButton>
                     </h:column>
                 </h:dataTable>   

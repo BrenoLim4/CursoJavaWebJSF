@@ -34,7 +34,7 @@ public class FilterAutenticacao implements Filter {
 
         User usuarioSessao = (User) session.getAttribute("usuarioSessao");
         String url = req.getRequestURI();
-        if (usuarioSessao == null && !url.toLowerCase().contains("login.xthml".toLowerCase()) && !url.contains("png")) {
+        if (usuarioSessao == null && !url.toLowerCase().contains("login.xthml".toLowerCase()) && !url.contains("icon")) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/faces/login.xhtml");
             dispatcher.forward(request, response);
             return;

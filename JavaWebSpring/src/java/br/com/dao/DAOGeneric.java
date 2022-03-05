@@ -12,6 +12,7 @@ import static java.util.stream.Collectors.joining;
 import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import org.junit.Test;
 
 /**
  *
@@ -107,5 +108,8 @@ public class DAOGeneric implements Serializable {
         return "SELECT ent FROM " + entidade.getName()+ " ent";
     }
     //</editor-fold>
-
+    
+    public static EntityManager getEntityManager(){
+        return JPAUtil.getEntityManager();
+    }
 }

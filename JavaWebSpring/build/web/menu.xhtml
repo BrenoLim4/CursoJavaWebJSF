@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
+    <h:form>
+        <h:panelGrid style="margin-left: 90%">
+            <h:commandLink action="#{login.logout()}" title="Efetuar logout">
+                <h:graphicImage value="#{sessionBean.getImageUrl(sessionBean.nameImageLogout)}"/>
+            </h:commandLink>
+        </h:panelGrid>
+    </h:form>
+</html>

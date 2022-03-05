@@ -3,7 +3,7 @@
 <hibernate-configuration>
     <session-factory>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
-        <property name="hibernate.connection.url" > jdbc:mysql://localhost:3308/mysql?zeroDateTimeBehavior=convertToNull </property>
+        <property name="hibernate.connection.url" > jdbc:mysql://localhost:3306/modulo3_spring_mvc?zeroDateTimeBehavior=convertToNull </property>
         <property name="hibernate.connection.username"> root </property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="hibernate.connection.password"> root </property>      
@@ -12,5 +12,6 @@
         <mapping class="br.com.entidades.Pessoa"/>
         <mapping class="br.com.entidades.Sexo"/>
         <mapping class="br.com.entidades.User"/>
+        <mapping class="br.com.entidades.Endereco"/>
     </session-factory>
 </hibernate-configuration>
