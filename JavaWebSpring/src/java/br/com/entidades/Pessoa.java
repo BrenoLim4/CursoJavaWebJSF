@@ -25,7 +25,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 
 /**
  *
@@ -45,24 +44,20 @@ public class Pessoa implements Persistivel{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Required(message = "Campo [Nome] é obrigatório")
     private String nome;
     @Column(name = "sobre_nome",nullable = false)
-    @Required(message = "Campo [Sobrenome] é obrigatório")
     private String sobrenome;
     @Column(name = "nome_completo",nullable = false)
     private String nomeCompleto;
-    @Required(message = "Campo [Data de Nascimento] é obrigatório")
     @Column(name = "data_nascimento", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
-    @Required(message = "Campo [Sexo] é obrigatório")
     @JoinColumn(name = "id_sexo", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Sexo sexo;
-    @JoinColumn(name = "id_endereco_atual", referencedColumnName = "id")
-    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH}, fetch = FetchType.LAZY)
-    private Endereco enderecoAtual;
+    @JoinColumn(name = "id_endereco", referencedColumnName = "id")
+    @OneToOne(cascade = {CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    private Endereco endereco;
 //    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id_pessoa")    
 //    private List<User> usuarios = new ArrayList<>();
     @Transient
@@ -179,12 +174,12 @@ public class Pessoa implements Persistivel{
         return new Pessoa();
     }
     
-    public Endereco getEnderecoAtual() {
-        return enderecoAtual;
+    public Endereco getEndereco() {
+        return endereco;
     }
 
-    public void setEnderecoAtual(Endereco enderecoAtual) {
-        this.enderecoAtual = enderecoAtual;
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
     
 //</editor-fold>

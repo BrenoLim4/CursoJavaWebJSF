@@ -9501,4 +9501,23 @@ INSERT INTO cidade VALUES(9389, 'Wanderlandia', 27);
 
 ALTER TABLE `modulo3_spring_mvc`.`cidade` 
 ADD INDEX `idx_estado` USING BTREE (`estado_id`);
-;
+
+create table endereco(
+id int auto_increment primary key,
+cep varchar(8) not null,
+logradouro varchar(100),
+bairro varchar(50),
+localidade varchar(50),
+uf varchar(2),
+numero varchar(10)
+
+);
+
+create unique index idx_cep_numero using btree on endereco (cep asc, numero asc);
+
+alter table pessoa
+add column id_endereco int,
+add constraint foreign key fk_endereco(id_endereco) references endereco(id)
+on delete set null
+on update no action;
+

@@ -15,7 +15,7 @@
             height: 20px
         }
     </style>
-    <h:body style="background-color: #ccffcc; font: bold 11pt italic">
+        <h:body style="background-color: #00ff99; font: bold 11pt italic">
         <ui:include src="/menu.xhtml"/>
         <h:messages id="messaes" errorStyle="color: red; font-size: 12pt;"
                     infoStyle="color: blue; font-size: 12pt;">  
@@ -67,13 +67,17 @@
                         </h:selectOneMenu>
                         
                         <h:outputLabel value="CEP:"/>
-                        <h:inputText id="cep" value="#{pessoaBean.endereco.cep}" 
-                                     required="true" maxlength="8" pt:placeholder="00000000">
+                        <h:inputText id="cep" value="#{pessoaBean.endereco.cep}"                                     
+                                     required="true" maxlength="8" pt:placeholder="Somente números">
                             <f:ajax event="blur" execute="@this" listener="#{pessoaBean.pesquisaCep}" render="logradouro"/>
                         </h:inputText>
                         
                         <h:outputLabel value="Logradouro:"/>
                         <h:inputText id="logradouro" value="#{pessoaBean.endereco.logradouro}" />
+                        
+                        <h:outputLabel value="Número" title="Número residencial"/>
+                        <h:inputText id="numero" value="#{pessoaBean.endereco.numero}"
+                                     pt:placeholder="Número resindecial"/>
                         
                         <h:outputLabel value="Login:" rendered="#{pessoaBean.tituloPanel eq 'Incluir novo Usuário'}" />
                         <h:inputText id="login" value="#{pessoaBean.login}" required="true" 
@@ -158,7 +162,7 @@
                         <h:commandButton title="Editar" image="#{sessionBean.getImageUrl(sessionBean.nameImageEdit)}" styleClass="butao">
                             <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
                             <f:setPropertyActionListener value="#{pessoa.sexo}" target="#{pessoaBean.tipoSexo}"/>
-                            <f:setPropertyActionListener value="#{pessoa.enderecoAtual}" target="#{pessoaBean.endereco}"/>                            
+                            <f:setPropertyActionListener value="#{pessoa.endereco}" target="#{pessoaBean.endereco}"/>                            
                             <f:setPropertyActionListener value="Editar dados do Usuário" target="#{pessoaBean.tituloPanel}"/>
                              <f:ajax execute="@this" render="@form"/>
                         </h:commandButton>

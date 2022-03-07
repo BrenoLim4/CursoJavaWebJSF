@@ -13,5 +13,7 @@
         <mapping class="br.com.entidades.Sexo"/>
         <mapping class="br.com.entidades.User"/>
         <mapping class="br.com.entidades.Endereco"/>
+        <mapping class="br.com.entidades.Cidade"/>
+        <mapping class="br.com.entidades.Estado"/>
     </session-factory>
 </hibernate-configuration>

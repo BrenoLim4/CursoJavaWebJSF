@@ -8,7 +8,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Endereco.class)
 public abstract class Endereco_ {
 
-	public static volatile SingularAttribute<Endereco, Integer> idPessoa;
+	public static volatile SingularAttribute<Endereco, Long> idPessoa;
 	public static volatile SingularAttribute<Endereco, String> uf;
 	public static volatile SingularAttribute<Endereco, String> logradouro;
 	public static volatile SingularAttribute<Endereco, String> bairro;

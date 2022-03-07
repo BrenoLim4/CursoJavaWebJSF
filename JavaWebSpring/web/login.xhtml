@@ -5,6 +5,13 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
         <title>Login</title>
+        <style type="text/css">
+            .butao{
+                margin-left: 15%; 
+                transform: scaleX(0.5) scaley(0.5);
+            }
+        </style>
+
     </h:head>
     <body style="background-color: darkslategray">
         <!--<div style=" position: relative; transform: scaleX(1.5) scaley(1.3) translateY(30%) translateX(550px); width: 266px">-->
@@ -27,8 +34,10 @@
                     </h:panelGrid>
 
                     <h:commandButton value="Entrar" 
+                                     image="#{sessionBean.getImageUrl(sessionBean.nameImageLogin)}"
                                      action="#{login.logar()}"
-                                     style="margin-left: 40%; b"/>
+                                     style="margin-left: 40%"
+                                     styleClass="butao"/>
 
                 </h:panelGrid>
             </h:form>

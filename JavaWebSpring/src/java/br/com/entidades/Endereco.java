@@ -7,7 +7,6 @@ package br.com.entidades;
 
 import br.com.dao.Persistivel;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 
 /**
  *
@@ -29,37 +27,26 @@ import org.apache.logging.log4j.core.config.plugins.validation.constraints.Requi
 @NamedQueries({
     @NamedQuery(name = "Endereco.findAll", query = "SELECT e FROM Endereco e")
     , @NamedQuery(name = "Endereco.findById", query = "SELECT e FROM Endereco e WHERE e.id = :id")
-    , @NamedQuery(name = "Endereco.findByIdPessoa", query = "SELECT e FROM Endereco e WHERE e.idPessoa = :idPessoa")
-    , @NamedQuery(name = "Endereco.findByCep", query = "SELECT e FROM Endereco e WHERE e.cep = :cep")
-    , @NamedQuery(name = "Endereco.findByLogradouro", query = "SELECT e FROM Endereco e WHERE e.logradouro = :logradouro")
-    , @NamedQuery(name = "Endereco.findByBairro", query = "SELECT e FROM Endereco e WHERE e.bairro = :bairro")
-    , @NamedQuery(name = "Endereco.findByLocalidade", query = "SELECT e FROM Endereco e WHERE e.localidade = :localidade")
-    , @NamedQuery(name = "Endereco.findByUf", query = "SELECT e FROM Endereco e WHERE e.uf = :uf")})
+    , @NamedQuery(name = "Endereco.findByCepENumero", query = "SELECT e FROM Endereco e WHERE e.cep = :cep and e.numero = :numero")})
 public class Endereco implements Persistivel {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(nullable = false)
     private Long id;
-    @Basic(optional = false)
-    @Column(name = "id_pessoa", nullable = false)
-    private Long idPessoa;
-    @Basic(optional = false)
-    @Required(message = "Campo [CEP] é obrigatório")
+//    @Basic(optional = false)
+//    @Column(name = "id_pessoa", nullable = false)
+//    private Long idPessoa;
+    @Column(nullable = false, length = 10)
+    private Integer numero;
     @Column(nullable = false, length = 8)
     private String cep;
-    @Basic(optional = false)
     @Column(nullable = false, length = 100)
     private String logradouro;
-    @Basic(optional = false)
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, length = 50)
     private String bairro;
-    @Basic(optional = false)
     @Column(nullable = false, length = 30)
     private String localidade;
-    @Basic(optional = false)
     @Column(nullable = false, length = 2)
     private String uf;
 
@@ -97,13 +84,13 @@ public class Endereco implements Persistivel {
     public void setId(Long id) {
         this.id = id;
     }
-    
-    public Long getIdPessoa() {
-        return idPessoa;
+
+    public Integer getNumero() {
+        return numero;
     }
-    
-    public void setIdPessoa(Long idPessoa) {
-        this.idPessoa = idPessoa;
+
+    public void setNumero(Integer numero) {
+        this.numero = numero;
     }
     
     public String getCep() {

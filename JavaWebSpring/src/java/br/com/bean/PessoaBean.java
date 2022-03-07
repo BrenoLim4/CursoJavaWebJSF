@@ -14,7 +14,6 @@ import br.com.security.AutenticarImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +22,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import static java.util.Comparator.comparing;
 import java.util.List;
-import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
@@ -32,6 +30,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.model.SelectItem;
+import org.hibernate.HibernateException;
 
 /**
  *
@@ -87,15 +86,11 @@ public class PessoaBean implements Serializable {
     }
 
     public void salvar() {
-        try {
-            pessoa.setSexo(tipoSexo);
-            pessoa = DAOGeneric.salvarOuAtualizar(pessoa);
-            
-            endereco.setIdPessoa(pessoa.getId());
+        try {            
             endereco = DAOGeneric.salvarOuAtualizar(endereco);
-            
-//            pessoa.setEnderecoAtual(endereco);
-            
+            pessoa.setSexo(tipoSexo);
+            pessoa.setEndereco(endereco);
+            pessoa = DAOGeneric.salvarOuAtualizar(pessoa);
 
             if (!pessoas.contains(pessoa)) {
                 pessoas.add(pessoa);
@@ -108,7 +103,7 @@ public class PessoaBean implements Serializable {
             pessoas.sort(comparing(Pessoa::getNome));
             limparCampos();
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_INFO, "Salvo com sucesso", ""));
-        } catch (Exception ex) {
+        } catch (HibernateException ex) {
             ex.printStackTrace();
             System.err.println("ERROR" + ex.toString());
             FacesContext.getCurrentInstance().addMessage("", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao Salvar", ""));

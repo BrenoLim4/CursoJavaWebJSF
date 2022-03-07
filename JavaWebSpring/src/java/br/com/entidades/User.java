@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
 
 /**
  *
@@ -33,13 +32,10 @@ public class User implements Persistivel {
     @JoinColumn(name = "id_pessoa", referencedColumnName = "id", nullable = false)
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Pessoa pessoa;
-    @Required(message = "Campo [Login] é obrigatório")
     @Column(name="login", nullable = false, length =  45, unique = true)
     private String login;
-    @Required(message = "Campo [Senha] é obrigatório")
     @Column(name="senha", nullable = false, length =  45)
     private String senha;
-    @Required(message = "Campo [Tipo Usuário é obrigatório] é obrigatório")
     @Column(name= "id_tipo_usuario", nullable = false)
     private Long idTipoUsuario;
     private Boolean ativo = Boolean.TRUE;
